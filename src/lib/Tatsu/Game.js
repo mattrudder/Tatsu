@@ -1,9 +1,15 @@
-define('Tatsu/Game', ['require', 'jquery', 'Tatsu/Graphics'], function(r, $) {
+define(['require', 'jquery', 'Tatsu/Graphics', 'Tatsu/Keyboard'], function(r, $, Graphics, Keyboard) {
 	'use strict';
 
-	var Graphics = r('Tatsu/Graphics'),
-		defaults = {
-
+	var defaults = {
+			clearColor: 'black'
+		},
+		defaultState = {
+			onEnter: $.noop,
+			onPreDraw: $.noop,
+			onPostDraw: $.noop,
+			onUpdate: $.noop,
+			onExit: $.noop
 		};
 
 	function initializeOnce() {
@@ -27,7 +33,7 @@ define('Tatsu/Game', ['require', 'jquery', 'Tatsu/Graphics'], function(r, $) {
 					callback(currentTime + timeToCall);
 				}, timeToCall);
 
-				lastTime = currTime + timeToCall;
+				lastTime = currentTime + timeToCall;
 				return id;
 			};
 		}
@@ -39,34 +45,85 @@ define('Tatsu/Game', ['require', 'jquery', 'Tatsu/Graphics'], function(r, $) {
 		}
 	}
 
-	// private
-	function draw() {
-		var ctx = this.graphics.context2d();
-
-		ctx.fillStyle = 'rgb(255,99,71)';
-		ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-	}
-
-	function setupDrawTimer() {
+	function Game(options) {
 		var self = this;
 
-		this.timerId = window.requestAnimationFrame(function () {
-			draw.call(self);
-			setupDrawTimer.call(self);
-		}, this.graphics.canvasElem);
-	}
-
-	function tearDownDrawTimer() {
-		window.cancelAnimationFrame(this.timerId);
-	}
-
-	function Game(options) {
 		this.options = $.extend(defaults, options);
 		this.graphics = new Graphics(this.options.canvas);
+		this.stateStack = [];
 
-		setupDrawTimer.call(this);
+		function onPreDraw() {
+			currentState(self).onPreDraw.call(self);
+		}
+
+		function onPostDraw() {
+			currentState(self).onPostDraw.call(self);
+		}
+
+		function onUpdate(dt) {
+			currentState(self).onUpdate.call(self, dt);
+		}
+
+		function draw() {
+			self.graphics.clear(self.options.clearColor || 'black');
+
+			onPreDraw();
+
+			// TODO: Draw retained mode elements here (environment, sprites, etc).
+
+			onPostDraw();
+		}
+
+		function setupDrawTimer() {
+			var lastFrame = +new Date();
+
+			function loop(now) {
+				var dt;
+
+				self.timerId = window.requestAnimationFrame(loop, self.graphics.canvasElem);
+				dt = now - lastFrame;
+
+				// TODO: Investigate best value for stopping render.
+				if (dt < 150) {
+					onUpdate(dt);
+					draw();
+				}
+
+				lastFrame = now;
+			}
+
+			loop(lastFrame);
+		}
+
+		function tearDownDrawTimer() {
+			window.cancelAnimationFrame(self.timerId);
+		}
+
+		setupDrawTimer();
+	}
+
+	function currentState(self) {
+		return self.stateStack.length ? self.stateStack[self.stateStack.length - 1] : defaultState;
+	}
+
+	Game.createState = function (state) {
+		return $.extend(defaultState, state);
 	};
-	
+
+	Game.prototype.pushState = function (state) {
+		// TODO: Support transitions between states.
+		currentState(this).onExit.call(this);
+		this.stateStack.push(state);
+		state.onEnter.call(this);
+	};
+
+	Game.prototype.popState = function () {
+		// TODO: Support transitions between states.
+		currentState(this).onExit.call(this);
+		this.stateStack.pop();
+		currentState(this).onEnter.call(this);
+	};
+
 	initializeOnce();
 	
 	return Game;
