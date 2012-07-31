@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="100" height="100" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="rule_tileset" tilewidth="32" tileheight="32">
+  <image source="../images/rule_tileset.png" width="128" height="32"/>
+ </tileset>
+ <tileset firstgid="5" name="Tileset" tilewidth="32" tileheight="32">
+  <image source="../images/Tileset.png" width="1024" height="512"/>
+ </tileset>
+ <layer name="Ground" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt2DEKgDAQRcFcV7AKeK8c0UqQNCoI+cYpptlq2ddtK6U0gEksJ8ds7RzzejJ671npkUUPAIB3bQ+N3nd2emTRI8vVrfXI7DF6z1n1/w49cnu4vR5/p0cW//IsemTRI0u9afSef6EHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMD37Xf9vMI=
+  </data>
+ </layer>
+ <layer name="Trim" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt2UtKw1AUBuBsQhciuAefA59rEMWBKK7B56C+1uvpIHh6KJWWxAT7ffAP2jRwyM8N5d6mAVa1E9lN2YvsRw5KDiNHkeOUkwHm/e8uyufLyNWc311Hbsp3t71MtN70MS76GJeHyGPKU+Q58lLyGplE3lLeB5gXgHE4jZwtmfNBJl0Pdyvcc9/5FLT0MS76GJfax0bkM2Vzzj366E7eE5zuB9Y+6rPO19uuvnqbbv3kPY/pfkftY7uZ/Q+Vr1sX3futj1b77D+an3eXddG9ZfugX/oYl9pHfh/leDf9jdoHw8p9bDWz5+E1zsf7V8/4FrF++qePcalnroviPBYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAyL4Bmug/9g==
+  </data>
+ </layer>
+</map>

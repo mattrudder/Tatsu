@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="100" height="100" tilewidth="32" tileheight="32">
+ <properties>
+  <property name="DeleteTiles" value="true"/>
+ </properties>
+ <tileset firstgid="1" name="Tileset" tilewidth="32" tileheight="32">
+  <image source="../images/Tileset.png" width="1024" height="512"/>
+ </tileset>
+ <layer name="regions" width="100" height="100" opacity="0.65">
+  <data encoding="base64" compression="zlib">
+   eJztzyESADAMArD2/5+e361+5RIDAkMVW/Ujp56w+939I30HAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAKkObpMAMQ==
+  </data>
+ </layer>
+ <layer name="input_Ground" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt0cEJg0AUBNDdYgOCIKQiOzF2klY8KCgDH3Jd8t7l78wepzVG9foxT9FXeY6+ykv0VX5HX+VPP+/a77xf763f/6PIHSq5QyV3qOQOldwhfR87AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMA/OgDnaw5d
+  </data>
+ </layer>
+ <layer name="output_Trim" width="100" height="100">
+  <properties>
+   <property name="DeleteTiles" value="1"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJztyjEKwgAQRNFcLiAIAe8giiFB8Q6CIAjeOM0WW2yxbfC9Zqb4w8DejelfYs9Fd0j/FnstumP6S+xcdFP699i16E7pP2MfRbd3r2b3bnafZvdtdr9mBwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/bgMxqwhd
+  </data>
+ </layer>
+</map>

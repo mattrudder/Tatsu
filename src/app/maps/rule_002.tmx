@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="100" height="100" tilewidth="32" tileheight="32">
+ <properties>
+  <property name="DeleteTiles" value="false"/>
+ </properties>
+ <tileset firstgid="1" name="Tileset" tilewidth="32" tileheight="32">
+  <image source="../images/Tileset.png" width="1024" height="512"/>
+ </tileset>
+ <layer name="regions_input" width="100" height="100" opacity="0.65">
+  <data encoding="base64" compression="zlib">
+   eJzt10EOABAMBED+/2kPEBcJbZm5SU+S1Y3WqKgXP79kdbdeZA43ZMn77vwl0ftff5BZdL69j1n0/tcfZJQ17z//P6L3v/4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOGMAg3kAYQ==
+  </data>
+ </layer>
+ <layer name="regions_output" width="100" height="100" opacity="0.65">
+  <data encoding="base64" compression="zlib">
+   eJzt1zEOACAIBDD8/6fdXXQxJ7HdgBnIVdHN2PRfnwN/WXe/Ww1ARvr++x/AiXS+ls8BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA7pkP5AAx
+  </data>
+ </layer>
+ <layer name="input_Trim" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt18FJAwEURdGkOEEQBHsIBoPBYA+BQCCQCuxE7MRW3IwLL4yzUYjjOZvHy9/NMJ+fxYK/aD/RDxP9ONFPE/080d+X3/c5uR/5fTXkw8h8PeTjyHwz5NPIfDvk88h8N+TbyLN/nfE74fJcJes6WTfJuk3WXbJell9zzlbp3WHr9O6wTXp32Da9O2yX3h3W3TS2w+A3+D4uzz5Zh2Qdk3VK1jlZnzfunG9dLo//H5enN257b9z23rjtvXHbe+O298b9DzcvAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwE/4ADgXLXE=
+  </data>
+ </layer>
+ <layer name="output_Trim" width="100" height="100">
+  <properties>
+   <property name="DeleteTiles" value="1"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJzt1V0qhHEYxuFxYCIi9kA0MrEGERHZADsZB6KZiCxAViZLcfIc3Xly6uO6Tu5+73P+fwcDfpv55vuwdqG5L9YuNffl2pXmvlq71tzXa6/mvr5fN9+Bv+0g+jD6KPo4+iT6NPos+jz6Ivoy+jXepjdvFcCPcBt9F30fPY2eRT9EP0Y/RT9Hv0S/x//iw/8D/qWN5vtm7VZz364dNfed2t3mPq7da+77tZPmbbrxZgEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB86xOTkw9F
+  </data>
+ </layer>
+</map>
