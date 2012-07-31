@@ -13,9 +13,9 @@ require(['jquery', 'Tatsu/Game', 'app/DemoState'], function($, Game, demoState) 
 		var $c = $('canvas'),
 			game = new Game({
 				canvas: $c[0],
-				clearColor: 'rgb(255,99,71)'
+                initialState: demoState
+                //screenSize: { width: 320, height: 240 },
+				//clearColor: 'rgb(255,99,71)'
 			});
-
-		game.pushState(demoState);
 	});
 });

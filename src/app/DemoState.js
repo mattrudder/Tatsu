@@ -7,9 +7,7 @@ define(['Tatsu/Game', 'Tatsu/Keyboard'], function (Game, Keyboard) {
 
 	return Game.createState({
 		onEnter: function () {
-			var ctx = this.graphics.context2D();
-
-			textX = ctx.canvas.width;
+			textX = this.size().width;
 
 			// TODO: Setup key bindings for this state.
 		},
@@ -17,8 +15,7 @@ define(['Tatsu/Game', 'Tatsu/Keyboard'], function (Game, Keyboard) {
 			// TODO: Tear down key bindings for this state.
 		},
 		onUpdate: function (dt) {
-			var ctx = this.graphics.context2D(),
-				speed = keys.isKeyDown('shift') ? 2 : 1;
+			var speed = keys.isKeyDown('shift') ? 2 : 1;
 
 			// TODO: Replace with key bindings
 			if (keys.isKeyDown('left')) {
@@ -35,13 +32,13 @@ define(['Tatsu/Game', 'Tatsu/Keyboard'], function (Game, Keyboard) {
 				character.y += 3 * speed;
 			}
 
-			character.x = Math.max(Math.min(character.x, ctx.canvas.width), 0);
-			character.y = Math.max(Math.min(character.y, ctx.canvas.height), 0);
+			character.x = Math.max(Math.min(character.x, this.size().width), 0);
+			character.y = Math.max(Math.min(character.y, this.size().height), 0);
 		},
 		onPreDraw: function () {
 			var ctx = this.graphics.context2D();
 
-			ctx.fillStyle = 'white';
+			ctx.fillStyle = 'red';
 			ctx.beginPath();
 			ctx.arc(character.x, character.y, 20, 0, Math.PI * 2, true);
 			ctx.fill();
@@ -51,19 +48,17 @@ define(['Tatsu/Game', 'Tatsu/Keyboard'], function (Game, Keyboard) {
 			var ctx = this.graphics.context2D(),
 				textWidth;
 
-
-
 			ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
-			ctx.fillRect(0, ctx.canvas.height - 24, ctx.canvas.width, ctx.canvas.height);
+			ctx.fillRect(0, this.size().height - 24, this.size().width, this.size().height);
 
-			ctx.font = '8pt Tahoma';
+			ctx.font = '8pt "Oxygene 1"';
 			ctx.fillStyle = 'rgb(255, 255, 255)';
-			ctx.fillText('Tatsu Demo', textX, ctx.canvas.height - 8);
+			ctx.fillText('TATSU DEMO', textX, this.size().height - 8);
 
 			textWidth = ctx.measureText('Tatsu Demo').width;
 			textX -= 2;
 			if (textX <= -textWidth) {
-				textX = ctx.canvas.width;
+				textX = this.size().width;
 			}
 		}
 	});

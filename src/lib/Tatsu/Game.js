@@ -10,7 +10,10 @@ define(['require', 'jquery', 'Tatsu/Graphics', 'Tatsu/Keyboard'], function(r, $,
 			onPostDraw: $.noop,
 			onUpdate: $.noop,
 			onExit: $.noop
-		};
+        },
+        screenSize,
+        incomingState = null,
+        outgoingState = null;
 
 	function initializeOnce() {
 		// http://paulirish.com/2011/requestanimationframe-for-smart-animating/
@@ -48,9 +51,23 @@ define(['require', 'jquery', 'Tatsu/Graphics', 'Tatsu/Keyboard'], function(r, $,
 	function Game(options) {
 		var self = this;
 
-		this.options = $.extend(defaults, options);
-		this.graphics = new Graphics(this.options.canvas);
+        this.options = $.extend(defaults, options);
+
+        screenSize = this.options.screenSize || {
+            width: this.options.canvas.width,
+            height: this.options.canvas.height
+        };
+
+		this.graphics = new Graphics({
+            screenSize: screenSize,
+            canvas: this.options.canvas
+        });
+
 		this.stateStack = [];
+
+        if (this.options.initialState) {
+            this.pushState(this.options.initialState);
+        }
 
 		function onPreDraw() {
 			currentState(self).onPreDraw.call(self);
@@ -72,6 +89,7 @@ define(['require', 'jquery', 'Tatsu/Graphics', 'Tatsu/Keyboard'], function(r, $,
 			// TODO: Draw retained mode elements here (environment, sprites, etc).
 
 			onPostDraw();
+            self.graphics.present();
 		}
 
 		function setupDrawTimer() {
@@ -85,8 +103,26 @@ define(['require', 'jquery', 'Tatsu/Graphics', 'Tatsu/Keyboard'], function(r, $,
 
 				// TODO: Investigate best value for stopping render.
 				if (dt < 150) {
+                    if (incomingState) {
+                        // TODO: Support transitions between states.
+                        currentState(self).onExit.call(self);
+                        self.stateStack.push(incomingState);
+                        incomingState.onEnter.call(self);
+
+                        incomingState = null;
+                    }
+
 					onUpdate(dt);
 					draw();
+
+                    if (outgoingState) {
+                        // TODO: Support transitions between states.
+                        outgoingState.onExit.call(self);
+                        self.stateStack.pop();
+                        currentState(self).onEnter.call(self);
+
+                        outgoingState = null;
+                    }
 				}
 
 				lastFrame = now;
@@ -106,22 +142,20 @@ define(['require', 'jquery', 'Tatsu/Graphics', 'Tatsu/Keyboard'], function(r, $,
 		return self.stateStack.length ? self.stateStack[self.stateStack.length - 1] : defaultState;
 	}
 
+    Game.prototype.size = function () {
+        return screenSize;
+    };
+
 	Game.createState = function (state) {
 		return $.extend(defaultState, state);
 	};
 
 	Game.prototype.pushState = function (state) {
-		// TODO: Support transitions between states.
-		currentState(this).onExit.call(this);
-		this.stateStack.push(state);
-		state.onEnter.call(this);
+        incomingState = state;
 	};
 
 	Game.prototype.popState = function () {
-		// TODO: Support transitions between states.
-		currentState(this).onExit.call(this);
-		this.stateStack.pop();
-		currentState(this).onEnter.call(this);
+        outgoingState = currentState(this);
 	};
 
 	initializeOnce();

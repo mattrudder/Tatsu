@@ -11,7 +11,6 @@
     <option nonew="true" />
     <option browser="true" />
     <option devel="true" />
-    <option indent="4" />
     <option maxerr="50" />
   </component>
 </project>
