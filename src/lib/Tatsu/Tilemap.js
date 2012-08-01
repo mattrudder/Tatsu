@@ -4,7 +4,7 @@ define(['jquery'], function ($) {
 	var defaults = {};
 
 	function Tilemap (options) {
-		this.options = $.extend(defaults, options);
+		this.options = $.extend({}, defaults, options);
 
 		$.getJSON(this.options.url, function () {
 

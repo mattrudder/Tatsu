@@ -11,11 +11,21 @@ require(['jquery', 'Tatsu/Game', 'app/DemoState'], function($, Game, demoState) 
 
 	$(function () {
 		var $c = $('canvas'),
-			game = new Game({
-				canvas: $c[0],
-                initialState: demoState
-                //screenSize: { width: 320, height: 240 },
-				//clearColor: 'rgb(255,99,71)'
-			});
+            resources,
+			game;
+
+        resources = [
+            'images/Tileset.png',
+            'maps/test.map'
+        ];
+
+        game = new Game({
+            canvas: $c[0],
+            initialState: demoState,
+            resourceRoot: '/src/app/',
+            resources: resources
+            //screenSize: { width: 320, height: 240 },
+            //clearColor: 'rgb(255,99,71)'
+		});
 	});
 });

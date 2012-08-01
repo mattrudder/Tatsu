@@ -10,7 +10,7 @@ define(['jquery'], function ($) {
 	function Graphics(options) {
         var i, vendors = ['moz', 'webkit', 'o', 'ms'];
 
-        this.options = $.extend(defaults, options);
+        this.options = $.extend({}, defaults, options);
 		ctx2d = this.options.canvas.getContext('2d');
 
         if (this.options.scaleMode === 'pixel') {
