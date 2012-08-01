@@ -1,4 +1,4 @@
-define(['require', 'jquery', 'Tatsu/Graphics', 'Tatsu/Keyboard'], function(r, $, Graphics, Keyboard) {
+define(['require', 'jquery', 'Tatsu/Console', 'Tatsu/Graphics', 'Tatsu/Keyboard', 'Tatsu/ResourceLoader'], function(r, $, console, Graphics, Keyboard, Resources) {
 	'use strict';
 
 	var defaults = {
@@ -65,6 +65,7 @@ define(['require', 'jquery', 'Tatsu/Graphics', 'Tatsu/Keyboard'], function(r, $,
 
 		this.stateStack = [];
 
+		// TODO: Add built-in preloader state.
         if (this.options.initialState) {
             this.pushState(this.options.initialState);
         }

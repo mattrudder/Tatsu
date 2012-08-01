@@ -1,4 +1,4 @@
-define(['Tatsu/Game', 'Tatsu/Keyboard'], function (Game, Keyboard) {
+define(['Tatsu/Console', 'Tatsu/Game', 'Tatsu/Keyboard', 'Tatsu/ResourceLoader'], function (console, Game, Keyboard, Resources) {
 	"use strict";
 
 	var textX,
