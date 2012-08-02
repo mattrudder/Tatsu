@@ -2,13 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="716730ae-4242-403e-90f5-6c3b57c7cd9d" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/app/maps/test.json" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/app/main.js" afterPath="$PROJECT_DIR$/src/app/main.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/lib/Tatsu/Game.js" afterPath="$PROJECT_DIR$/src/lib/Tatsu/Game.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/lib/Tatsu/Graphics.js" afterPath="$PROJECT_DIR$/src/lib/Tatsu/Graphics.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/lib/Tatsu/ResourceLoader.js" afterPath="$PROJECT_DIR$/src/lib/Tatsu/ResourceLoader.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/lib/Tatsu/Tilemap.js" afterPath="$PROJECT_DIR$/src/lib/Tatsu/Tilemap.js" />
     </list>
     <ignored path="Tatsu.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -39,10 +35,19 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Game.js" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="Game.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/lib/Tatsu/Game.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="152" column="0" selection-start="4121" selection-end="4121" vertical-scroll-proportion="0.75301206">
+            <state line="71" column="0" selection-start="1797" selection-end="1797" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ImageResource.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/lib/Tatsu/Resources/ImageResource.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="4" column="0" selection-start="100" selection-end="100" vertical-scroll-proportion="-30.0">
               <folding />
             </state>
           </provider>
@@ -69,17 +74,19 @@
       <file leaf-file-name="ResourceLoader.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/lib/Tatsu/ResourceLoader.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="38" column="79" selection-start="1123" selection-end="1123" vertical-scroll-proportion="0.0">
+            <state line="43" column="68" selection-start="953" selection-end="965" vertical-scroll-proportion="-255.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Tilemap.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/lib/Tatsu/Tilemap.js">
+      <file leaf-file-name="Path.js" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/lib/Tatsu/Utility/Path.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="6" column="55" selection-start="150" selection-end="150" vertical-scroll-proportion="0.0">
-              <folding />
+            <state line="33" column="25" selection-start="1418" selection-end="1418" vertical-scroll-proportion="0.74418604">
+              <folding>
+                <element signature="n#!!doc" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -106,10 +113,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/lib/Graphics.js" />
-        <option value="$PROJECT_DIR$/src/lib/Tatsu/Gamepad.js" />
-        <option value="$PROJECT_DIR$/src/lib/Tatsu/Keyboard.js" />
-        <option value="$PROJECT_DIR$/src/index.html" />
         <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/src/lib/Tatsu/Trace.js" />
         <option value="$PROJECT_DIR$/src/lib/Tatsu/Console.js" />
@@ -117,15 +120,23 @@
         <option value="$PROJECT_DIR$/src/app/main.js" />
         <option value="$PROJECT_DIR$/src/lib/Tatsu/Graphics.js" />
         <option value="$PROJECT_DIR$/src/lib/Tatsu/Tilemap.js" />
+        <option value="$PROJECT_DIR$/src/lib/Tatsu/Resources/Image.js" />
+        <option value="$PROJECT_DIR$/src/lib/Tatsu/Resources/ImageLoader.js" />
+        <option value="$PROJECT_DIR$/src/lib/Tatsu/Resources/ImageHandler.js" />
+        <option value="$PROJECT_DIR$/src/lib/Tatsu/Resources/ImageResource.js" />
+        <option value="$PROJECT_DIR$/src/lib/Tatsu/Utility/UriQuery.js" />
+        <option value="$PROJECT_DIR$/src/lib/Tatsu/Utility/Uri.js" />
         <option value="$PROJECT_DIR$/src/lib/Tatsu/ResourceLoader.js" />
         <option value="$PROJECT_DIR$/src/lib/Tatsu/Game.js" />
+        <option value="$PROJECT_DIR$/src/lib/Tatsu/Utility/Path.js" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="y" value="22" />
-    <option name="width" value="1680" />
-    <option name="height" value="940" />
+    <option name="x" value="-4" />
+    <option name="y" value="-4" />
+    <option name="width" value="1248" />
+    <option name="height" value="1164" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -153,6 +164,16 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope">
+        <subPane subId="Project Files">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -221,6 +242,32 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="lib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Tatsu" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Utility" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Tatsu" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Tatsu" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="app" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -271,28 +318,18 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope">
-        <subPane subId="Project Files">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="recentsLimit" value="5" />
     <property name="options.lastSelected" value="preferences.keymap" />
+    <property name="recentsLimit" value="5" />
     <property name="JavaScriptLanguageLevel" value="ES5" />
     <property name="FullScreen" value="false" />
     <property name="JavaScriptPreferStrict" value="true" />
-    <property name="options.splitter.details.proportions" value="0.3660287" />
     <property name="options.searchVisible" value="true" />
+    <property name="options.splitter.details.proportions" value="0.3660287" />
   </component>
   <component name="RunManager" selected="JavaScript Debug.Local HTTP in Chrome">
     <configuration default="false" name="index.html" type="JavascriptDebugSession" factoryName="Local" temporary="true">
@@ -354,14 +391,14 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="22" width="1680" height="940" extended-state="6" />
+    <frame x="-4" y="-4" width="1248" height="1164" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32722834" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.15691008" sideWeight="0.2832723" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.15691008" sideWeight="0.3809524" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3270936" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2571898" sideWeight="0.41280788" order="1" side_tool="true" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2571898" sideWeight="0.25320196" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.29633301" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -449,11 +486,11 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
-      <provider editor-type-id="text-editor">
-        <state line="1" column="5" selection-start="11" selection-end="11" vertical-scroll-proportion="0.0" />
-      </provider>
       <provider selected="true" editor-type-id="MarkdownPreviewEditor">
         <state />
+      </provider>
+      <provider editor-type-id="text-editor">
+        <state line="1" column="5" selection-start="11" selection-end="11" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/index.html">
@@ -477,13 +514,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/lib/Tatsu/Console.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="3" selection-start="407" selection-end="407" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/lib/JavascriptLanguage.jar!/com/intellij/lang/javascript/index/predefined/ECMAScript.js2">
       <provider selected="true" editor-type-id="text-editor">
         <state line="126" column="25" selection-start="5618" selection-end="5618" vertical-scroll-proportion="0.33333334">
@@ -491,16 +521,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/DemoState.js">
+    <entry file="file://$PROJECT_DIR$/src/lib/Tatsu/Console.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="53" column="0" selection-start="1398" selection-end="1533" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/main.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="10" selection-start="370" selection-end="370" vertical-scroll-proportion="0.0">
+        <state line="14" column="3" selection-start="407" selection-end="407" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -512,6 +535,13 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/DemoState.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="53" column="0" selection-start="1398" selection-end="1533" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/lib/Tatsu/Tilemap.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="6" column="55" selection-start="150" selection-end="150" vertical-scroll-proportion="0.0">
@@ -519,17 +549,40 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/lib/Tatsu/Resources/ImageResource.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="4" column="0" selection-start="100" selection-end="100" vertical-scroll-proportion="-30.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/main.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="19" column="10" selection-start="370" selection-end="370" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/lib/Tatsu/ResourceLoader.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="38" column="79" selection-start="1123" selection-end="1123" vertical-scroll-proportion="0.0">
+        <state line="43" column="68" selection-start="953" selection-end="965" vertical-scroll-proportion="-255.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/lib/Tatsu/Game.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="152" column="0" selection-start="4121" selection-end="4121" vertical-scroll-proportion="0.75301206">
+        <state line="71" column="0" selection-start="1797" selection-end="1797" vertical-scroll-proportion="0.0">
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/lib/Tatsu/Utility/Path.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="33" column="25" selection-start="1418" selection-end="1418" vertical-scroll-proportion="0.74418604">
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

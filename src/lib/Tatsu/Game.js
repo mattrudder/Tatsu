@@ -1,4 +1,6 @@
-define(['require', 'jquery', 'Tatsu/Console', 'Tatsu/Graphics', 'Tatsu/Keyboard', 'Tatsu/ResourceLoader'], function(r, $, console, Graphics, Keyboard, ResourceLoader) {
+define(
+	['require', 'jquery', 'Tatsu/Console', 'Tatsu/Graphics', 'Tatsu/Keyboard', 'Tatsu/ResourceLoader', 'Tatsu/Resources/ImageResource'],
+	function(r, $, console, Graphics, Keyboard, ResourceLoader) {
 	'use strict';
 
 	var defaults = {
@@ -10,8 +12,8 @@ define(['require', 'jquery', 'Tatsu/Console', 'Tatsu/Graphics', 'Tatsu/Keyboard'
 			onPostDraw: $.noop,
 			onUpdate: $.noop,
 			onExit: $.noop
-        },
-        defaultLoadingState;
+		},
+		defaultLoadingState;
 
 	function setupRaf() {
 		// http://paulirish.com/2011/requestanimationframe-for-smart-animating/
@@ -48,52 +50,54 @@ define(['require', 'jquery', 'Tatsu/Console', 'Tatsu/Graphics', 'Tatsu/Keyboard'
 
 	function Game(options) {
 		var self = this,
-            screenSize,
-            incomingState = null,
-            outgoingState = null,
-            resourceLoaderOptions = {},
-            resourceLoader;
+			screenSize,
+			incomingState = null,
+			outgoingState = null,
+			resourceLoaderOptions = {},
+			resourceLoader;
 
-        this.size = function () {
-            return screenSize;
-        };
+		this.size = function () {
+			return screenSize;
+		};
 
-        this.pushState = function (state) {
-            incomingState = state;
-        };
+		this.pushState = function (state) {
+			incomingState = state;
+		};
 
-        this.popState = function () {
-            outgoingState = currentState(this);
-        };
+		this.popState = function () {
+			outgoingState = currentState(this);
+		};
 
-        this.options = $.extend({}, defaults, options);
+		this.options = $.extend({}, defaults, options);
 
-        resourceLoader = new ResourceLoader({
-            resourcePath: this.options.resourcePath
-        });
+		resourceLoader = new ResourceLoader({
+			resourceRoot: this.options.resourceRoot,
+			resourceTypes: [r('Tatsu/Resources/ImageResource')],
+			complete: function () {
+				self.popState();
 
-        resourceLoader.loadResources(this.options.resources || [], function () {
-            self.popState();
+				if (self.options.initialState) {
+					self.pushState(self.options.initialState);
+				}
+			}
+		});
 
-            if (self.options.initialState) {
-                self.pushState(self.options.initialState);
-            }
-        });
+		resourceLoader.loadResources(this.options.resources || []);
 
-        screenSize = this.options.screenSize || {
-            width: this.options.canvas.width,
-            height: this.options.canvas.height
-        };
+		screenSize = this.options.screenSize || {
+			width: this.options.canvas.width,
+			height: this.options.canvas.height
+		};
 
 		this.graphics = new Graphics({
-            screenSize: screenSize,
-            canvas: this.options.canvas
-        });
+			screenSize: screenSize,
+			canvas: this.options.canvas
+		});
 
 		this.stateStack = [];
 
 		// TODO: Add built-in preloader state.
-        this.pushState(defaultLoadingState);
+		this.pushState(defaultLoadingState);
 
 		function onPreDraw() {
 			currentState(self).onPreDraw.call(self);
@@ -115,7 +119,7 @@ define(['require', 'jquery', 'Tatsu/Console', 'Tatsu/Graphics', 'Tatsu/Keyboard'
 			// TODO: Draw retained mode elements here (environment, sprites, etc).
 
 			onPostDraw();
-            self.graphics.present();
+			self.graphics.present();
 		}
 
 		function setupDrawTimer() {
@@ -129,26 +133,26 @@ define(['require', 'jquery', 'Tatsu/Console', 'Tatsu/Graphics', 'Tatsu/Keyboard'
 
 				// TODO: Investigate best value for stopping render.
 				if (dt < 150) {
-                    if (outgoingState) {
-                        // TODO: Support transitions between states.
-                        outgoingState.onExit.call(self);
-                        self.stateStack.pop();
-                        currentState(self).onEnter.call(self);
+					if (outgoingState) {
+						// TODO: Support transitions between states.
+						outgoingState.onExit.call(self);
+						self.stateStack.pop();
+						currentState(self).onEnter.call(self);
 
-                        outgoingState = null;
-                    }
+						outgoingState = null;
+					}
 
 					onUpdate(dt);
 					draw();
 
-                    if (incomingState) {
-                        // TODO: Support transitions between states.
-                        currentState(self).onExit.call(self);
-                        self.stateStack.push(incomingState);
-                        incomingState.onEnter.call(self);
+					if (incomingState) {
+						// TODO: Support transitions between states.
+						currentState(self).onExit.call(self);
+						self.stateStack.push(incomingState);
+						incomingState.onEnter.call(self);
 
-                        incomingState = null;
-                    }
+						incomingState = null;
+					}
 				}
 
 				lastFrame = now;
@@ -161,7 +165,7 @@ define(['require', 'jquery', 'Tatsu/Console', 'Tatsu/Graphics', 'Tatsu/Keyboard'
 			window.cancelAnimationFrame(self.timerId);
 		}
 
-        setupDrawTimer();
+		setupDrawTimer();
 	}
 
 	function currentState(self) {
@@ -174,19 +178,19 @@ define(['require', 'jquery', 'Tatsu/Console', 'Tatsu/Graphics', 'Tatsu/Keyboard'
 
 	setupRaf();
 
-    defaultLoadingState = Game.createState({
-       onPostDraw: function () {
-           var ctx = this.graphics.context2D(),
-               size = this.size();
+	defaultLoadingState = Game.createState({
+	   onPostDraw: function () {
+		   var ctx = this.graphics.context2D(),
+			   size = this.size();
 
-           ctx.fillStyle = 'black';
-           ctx.fillRect(0, 0, size.width, size.height);
+		   ctx.fillStyle = 'black';
+		   ctx.fillRect(0, 0, size.width, size.height);
 
-           ctx.font = '8pt Tahoma';
-           ctx.fillStyle = 'rgb(255, 255, 255)';
-           ctx.fillText('Loading State', size.width / 2, size.height / 2);
-       }
-    });
-	
+		   ctx.font = '8pt Tahoma';
+		   ctx.fillStyle = 'rgb(255, 255, 255)';
+		   ctx.fillText('Loading State', size.width / 2, size.height / 2);
+	   }
+	});
+
 	return Game;
 });

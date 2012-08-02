@@ -1,58 +1,58 @@
-define(['jquery', 'Tatsu/Console'], function ($, console) {
+define(['jquery', 'Tatsu/Console', 'Tatsu/Utility/Path'], function ($, console, Path) {
 	"use strict";
 
-    var defaults = {
-      resourceRoot: '/'
-    };
+	var defaults = {
+		resourceRoot: '/',
+		resourceTypes: []
+	};
 
-    function ResourceLoader (options) {
-        var self = this,
-            resources = {};
+	function ResourceLoader (options) {
+		var self = this,
+			resources = {};
 
-        function fetchResource(url, onReady) {
-            var resource = resources[url];
+		function fetchResource(url) {
+			var resource = resources[url];
 
-            if (resource && resource.status === 'ready') {
-                //onReady(url, resource.data);
-            }
-            else if (url.length > 0) {
+			if (resource && resource.status === 'ready') {
+				//onReady(url, resource.data);
+			}
+			else if (url.length > 0) {
 
-                // Prepend root to relative paths
-                if (url.substring(0, 1) !== '/')
-                    url = self.options.resourceRoot + url;
+				// Prepend root to relative paths
+				if (url.substring(0, 1) !== '/')
+					url = self.options.resourceRoot + url;
 
-                resources[url] = {
-                    url: url,
-                    status: 'loading',
-                    data: null
-                };
-            }
-        }
+				resources[url] = {
+					url: url,
+					status: 'loading',
+					data: null
+				};
+			}
+		}
 
-        this.loadResources = function (resourceList, onReady) {
-            var i, url;
+		this.loadResources = function (resourceList) {
+			var i, url;
 
-            for (i = 0; i < resourceList.length; ++i) {
-                url = resourceList[i];
+			for (i = 0; i < resourceList.length; ++i) {
+				url = resourceList[i];
 
-                if (typeof url !== 'string') {
-                    console.warn('Resource list contains a non-string value.');
-                    continue;
-                }
+				if (typeof url !== 'string') {
+					console.warn('Resource list contains a non-string value.');
+					continue;
+				}
 
-                fetchResource(url, onReady);
-            }
+				fetchResource(Path.combine(this.options.resourceRoot, url));
+			}
 
-            // HACKS: Testing.
-            setTimeout(onReady, 5000);
-        };
+			// HACKS: Testing.
+			setTimeout(this.options.complete, 1500);
+		};
 
-        this.options = $.extend({}, defaults, options);
+		this.options = $.extend({}, defaults, options);
 
-        // Ensure root ends with a slash
-        if (this.options.resourceRoot.length > 0 && this.options.resourceRoot.substring(this.options.resourceRoot.length - 1, this.options.resourceRoot.length) !== '/')
-            this.options.resourceRoot = this.options.resourceRoot + '/';
-    }
+		if (this.options.resourceRoot.length > 0 && this.options.resourceRoot.substring(this.options.resourceRoot.length - 1, this.options.resourceRoot.length) !== '/')
+			this.options.resourceRoot = this.options.resourceRoot + '/';
+	}
 
 	return ResourceLoader;
 });
