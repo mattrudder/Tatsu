@@ -11,22 +11,43 @@ define(['jquery', 'Tatsu/Console', 'Utility/Path'], function ($, console, Path) 
 			resources = {};
 
 		function fetchResource(url) {
-			var resource = resources[url];
+			var i,
+                extension,
+                resource,
+                createFunc = null,
+                resource = resources[url];
 
 			if (resource && resource.status === 'ready') {
 				//onReady(url, resource.data);
 			}
 			else if (url.length > 0) {
 
-				// Prepend root to relative paths
-				if (url.substring(0, 1) !== '/')
-					url = self.options.resourceRoot + url;
+                extension = Path.parseUri(url).file;
+                extension = extension.substr(extension.lastIndexOf('.') + 1);
 
-				resources[url] = {
-					url: url,
-					status: 'loading',
-					data: null
-				};
+                for (i = 0; i < self.options.resourceTypes.length; ++i) {
+                    if (self.options.resourceTypes[i].extensions.indexOf(extension) !== -1) {
+                        createFunc = self.options.resourceTypes[i].create;
+                    }
+                }
+
+                resource = {
+                    url: url,
+                    status: 'loading',
+                    data: null
+                };
+
+                if (createFunc) {
+                    createFunc(url, $.noop, function (data) {
+                        resource.status = 'ready';
+                        resource.data = data;
+                    });
+                }
+                else {
+                    resource.status = 'error';
+                }
+
+				resources[url] = resource;
 			}
 		}
 

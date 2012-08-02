@@ -84,10 +84,11 @@ define(function () {
 				}
 			}
 
-			return currentPath;
+			return toString(currentPath);
 		};
 
 	return {
+        parseUri: parseUri,
 		isAbsolute: isAbsolute,
 		isRelative: isRelative,
         resolve: resolve,
