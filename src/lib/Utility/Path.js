@@ -8,31 +8,28 @@
 define(function () {
 	"use strict";
 
-	// TODO: Integrate a better regex:
-	// '\b((?:[a-zA-Z0-9\-]+?://|[wW]{3}\d{0,3}[.]|[a-zA-Z0-9.\-]+[.][a-zA-Z]{2,4}/?)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))*(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'"".,<>?«»“”‘’]))'
-	var parseUri = function (str, strictMode) {
-			var parsers = {
-					strict: /^(?:([^:\/?#]+):)?(?:\/\/((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?))?((((?:[^?#\/]*\/)*)([^?#]*))(?:\?([^#]*))?(?:#(.*))?)/,
-					loose: /^(?:(?![^:@]+:[^:@\/]*@)([^:\/?#.]+):)?(?:\/\/)?((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/
-				},
-				keys = ["source", "protocol", "authority", "userInfo", "user", "password", "host", "port", "relative", "path", "directory", "file", "query", "anchor"],
-				q = {
-					name: "queryKey",
+	var parseUri = function (str) {
+		var	o   = {
+				strictMode: true,
+				key: ["source","protocol","authority","userInfo","user","password","host","port","relative","path","directory","file","query","anchor"],
+				q:   {
+					name:   "queryKey",
 					parser: /(?:^|&)([^&=]*)=?([^&]*)/g
 				},
-				m = parsers[strictMode ? "strict" : "loose"].exec(str),
-				uri = {},
-				i = 14;
-
-			while (i--) {
-				uri[keys[i]] = m[i] || "";
-			}
-
-			uri[q.name] = {};
-			uri[keys[12]].replace(q.parser, function ($0, $1, $2) {
-				if ($1) {
-					uri[q.name][$1] = $2;
+				parser: {
+					strict: /^(?:([^:\/?#]+):)?(?:\/\/((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?))?((((?:[^?#\/]*\/)*)([^?#]*))(?:\?([^#]*))?(?:#(.*))?)/,
+					loose:  /^(?:(?![^:@]+:[^:@\/]*@)([^:\/?#.]+):)?(?:\/\/)?((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/
 				}
+			},
+			m   = o.parser[o.strictMode ? "strict" : "loose"].exec(str),
+			uri = {},
+			i   = 14;
+
+			while (i--) uri[o.key[i]] = m[i] || "";
+
+			uri[o.q.name] = {};
+			uri[o.key[12]].replace(o.q.parser, function ($0, $1, $2) {
+				if ($1) uri[o.q.name][$1] = $2;
 			});
 
 			return uri;
@@ -41,9 +38,9 @@ define(function () {
 			var uri = path;
 
 			if (typeof uri === 'string')
-				uri = parseUri(uri, true);
+				uri = parseUri(uri);
 
-			return uri.host.length > 0 || uri.path.substring(0, 1) === '/';
+			return uri.protocol.length > 0 || uri.path.substring(0, 1) === '/';
 		},
 		isRelative = function (path) {
 			return !isAbsolute(path);
@@ -63,7 +60,7 @@ define(function () {
 			var uri = path;
 
 			if (typeof uri === 'string')
-				uri = parseUri(uri, true);
+				uri = parseUri(uri);
 
 			return toString(uri);
 		},
@@ -86,7 +83,7 @@ define(function () {
 				currentPath = parseUri(normalize(currentPath));
 
 				if (currentPath && lastPath && isRelative(currentPath)) {
-					currentPath.path = lastPath.path + (lastPath.path.substr(lastPath.path.length - 1) === '/' ? '' : '/') + currentPath.path;
+					currentPath = parseUri(toString(lastPath) + (lastPath.relative.substr(lastPath.relative.length - 1) === '/' ? '' : '/') + currentPath.relative);
 				}
 			}
 

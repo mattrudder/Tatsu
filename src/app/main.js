@@ -22,7 +22,7 @@ require(['jquery', 'Tatsu/Game', 'app/DemoState'], function($, Game, demoState) 
         game = new Game({
             canvas: $c[0],
             initialState: demoState,
-            resourceRoot: '/src/app/',
+            resourceRoot: 'http://localhost:8000/src/app/',
             resources: resources
             //screenSize: { width: 320, height: 240 },
             //clearColor: 'rgb(255,99,71)'

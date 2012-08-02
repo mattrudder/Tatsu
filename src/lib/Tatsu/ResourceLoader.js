@@ -1,4 +1,4 @@
-define(['jquery', 'Tatsu/Console', 'Tatsu/Utility/Path'], function ($, console, Path) {
+define(['jquery', 'Tatsu/Console', 'Utility/Path'], function ($, console, Path) {
 	"use strict";
 
 	var defaults = {
