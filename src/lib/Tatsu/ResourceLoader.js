@@ -49,6 +49,8 @@ define(['jquery', 'Tatsu/Console', 'Utility/Path'], function ($, console, Path) 
 		};
 
 		this.options = $.extend({}, defaults, options);
+
+        this.options.resourceRoot = Path.resolve(this.options.resourceRoot);
 	}
 
 	return ResourceLoader;

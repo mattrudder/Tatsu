@@ -8,22 +8,23 @@
 define(function () {
 	"use strict";
 
-	var parseUri = function (str) {
-		var	o   = {
-				strictMode: true,
-				key: ["source","protocol","authority","userInfo","user","password","host","port","relative","path","directory","file","query","anchor"],
-				q:   {
-					name:   "queryKey",
-					parser: /(?:^|&)([^&=]*)=?([^&]*)/g
-				},
-				parser: {
-					strict: /^(?:([^:\/?#]+):)?(?:\/\/((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?))?((((?:[^?#\/]*\/)*)([^?#]*))(?:\?([^#]*))?(?:#(.*))?)/,
-					loose:  /^(?:(?![^:@]+:[^:@\/]*@)([^:\/?#.]+):)?(?:\/\/)?((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/
-				}
-			},
-			m   = o.parser[o.strictMode ? "strict" : "loose"].exec(str),
-			uri = {},
-			i   = 14;
+	var anchor = document.createElement('a'), // Phony anchor used to resolve relative paths.
+        parseUri = function (str) {
+		    var	o   = {
+                    strictMode: true,
+                    key: ["source","protocol","authority","userInfo","user","password","host","port","relative","path","directory","file","query","anchor"],
+                    q:   {
+                        name:   "queryKey",
+                        parser: /(?:^|&)([^&=]*)=?([^&]*)/g
+                    },
+                    parser: {
+                        strict: /^(?:([^:\/?#]+):)?(?:\/\/((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?))?((((?:[^?#\/]*\/)*)([^?#]*))(?:\?([^#]*))?(?:#(.*))?)/,
+                        loose:  /^(?:(?![^:@]+:[^:@\/]*@)([^:\/?#.]+):)?(?:\/\/)?((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/
+                    }
+			    },
+                m   = o.parser[o.strictMode ? "strict" : "loose"].exec(str),
+                uri = {},
+                i   = 14;
 
 			while (i--) uri[o.key[i]] = m[i] || "";
 
@@ -34,6 +35,10 @@ define(function () {
 
 			return uri;
 		},
+        resolve = function (path) {
+            anchor.href = path;
+            return anchor.href;
+        },
 		isAbsolute = function (path) {
 			var uri = path;
 
@@ -56,14 +61,6 @@ define(function () {
 
 			return uriBuilder;
 		},
-		normalize = function (path) {
-			var uri = path;
-
-			if (typeof uri === 'string')
-				uri = parseUri(uri);
-
-			return toString(uri);
-		},
 		combine = function (paths) {
 			var i, currentPath = null, lastPath = null;
 
@@ -71,7 +68,7 @@ define(function () {
 				throw 'Invalid paths';
 
 			if (typeof paths === 'string')
-				paths = arguments;
+				paths = Array.prototype.slice.call(arguments, 0);
 
 			for (i = 0; i < paths.length; ++i) {
 				lastPath = currentPath;
@@ -80,21 +77,20 @@ define(function () {
 				if (typeof currentPath !== 'string')
 					throw 'Invalid path at index ' + i;
 
-				currentPath = parseUri(normalize(currentPath));
+				currentPath = parseUri(currentPath);
 
 				if (currentPath && lastPath && isRelative(currentPath)) {
 					currentPath = parseUri(toString(lastPath) + (lastPath.relative.substr(lastPath.relative.length - 1) === '/' ? '' : '/') + currentPath.relative);
 				}
 			}
 
-			console.log(toString(currentPath));
 			return currentPath;
 		};
 
 	return {
 		isAbsolute: isAbsolute,
 		isRelative: isRelative,
-		normalize: normalize,
+        resolve: resolve,
 		combine: combine
 	};
 });
