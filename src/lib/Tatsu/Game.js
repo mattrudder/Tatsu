@@ -77,7 +77,7 @@ define([
 			incomingState = state;
 
 			function onProgress(e) {
-				incomingState.progress = progress;
+				incomingState.progress = e.finishedCount / e.totalCount;
 			}
 
 			function onComplete(e) {
@@ -92,6 +92,7 @@ define([
 				compHandler = self.loader.addCompletionListener(onComplete);
 
 				incomingState.resources = self.loader.preload(incomingState.preload);
+				self.loader.start();
 			}
 		};
 
@@ -127,13 +128,15 @@ define([
 		}
 
 		function onPostDraw() {
-			var ctx = self.graphics.context2D();
+			var ctx = self.graphics.context2D(),
+				state = currentState(self);
 
-			currentState(self).onPostDraw.call(self);
+			state.onPostDraw.call(self);
 
 			if (incomingState && incomingState.progress) {
-				ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-				ctx.fillRect(0, screenSize.height - 20, screenSize.width * incomingState.progress, screenSize.height);
+				// TODO: Allow states to provide progress drawing?
+				ctx.fillStyle = 'rgba(255, 255, 255, 0.25)';
+				ctx.fillRect(4, screenSize.height - 20, (screenSize.width - 8) * incomingState.progress, 16);
 			}
 		}
 

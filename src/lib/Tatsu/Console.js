@@ -1,15 +1,16 @@
-define([], function () {
+define(function () {
 	"use strict";
 
-	var i,
-		noOp = function () {},
-		consoleFallback = function(name) { return console ? console[name] || noOp : noOp; },
-		wrappedMethods = ['log', 'info', 'warn', 'error', 'group', 'groupEnd', 'time', 'trace'],
-		wrapper = {};
+	var history = [],
+		con = window.console,
+		wrapper = {
+			log: function() {
+				history.push( arguments );
 
-	for (i = 0; i < wrappedMethods.length; ++i) {
-		wrapper[wrappedMethods[i]] = consoleFallback(wrappedMethods[i]);
-	}
+				con && con.log[ con.firebug ?
+					'apply' : 'call']( con, Array.prototype.slice.call( arguments ) );
+			}
+		};
 
 	return wrapper;
 });

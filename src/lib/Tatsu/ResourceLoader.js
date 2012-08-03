@@ -3,7 +3,10 @@ define(['jquery', 'Tatsu/Console', 'Utility/Path'], function ($, console, Path) 
 
 	var defaults = {
 			resourceRoot: '/',
-			resourceTypes: []
+			resourceTypes: [],
+			statusInterval: 5000,
+			loggingDelay: 20 * 1000,
+			timeout: Infinity
 		},
 		ResourceState = {
 			QUEUED: 0,
@@ -17,14 +20,15 @@ define(['jquery', 'Tatsu/Console', 'Utility/Path'], function ($, console, Path) 
 		var self = this,
 			entries = {},
 			progressListeners = [],
-			lastProgressChange = 0,
+			lastProgressChange = +new Date,
+			timeStarted,
 			loadingCount = 0;
 
 		function fetchResource(url, loadedOnly) {
 			var i,
-                extension,
-                createFunc = null,
-                entry = entries[url];
+				extension,
+				createFunc = null,
+				entry = entries[url];
 
 			loadedOnly = loadedOnly || false;
 
@@ -32,17 +36,17 @@ define(['jquery', 'Tatsu/Console', 'Utility/Path'], function ($, console, Path) 
 				return loadedOnly && entry.state !== ResourceState.LOADED ? null : entry.resource;
 			}
 			else if (url.length > 0) {
-                extension = Path.parseUri(url).file;
-                extension = extension.substr(extension.lastIndexOf('.') + 1);
+				extension = Path.parseUri(url).file;
+				extension = extension.substr(extension.lastIndexOf('.') + 1);
 
-                for (i = 0; i < self.options.resourceTypes.length; ++i) {
-                    if (self.options.resourceTypes[i].extensions.indexOf(extension) !== -1) {
-	                    createFunc = self.options.resourceTypes[i].create;
-                    }
-                }
+				for (i = 0; i < self.options.resourceTypes.length; ++i) {
+					if (self.options.resourceTypes[i].extensions.indexOf(extension) !== -1) {
+						createFunc = self.options.resourceTypes[i].create;
+					}
+				}
 
-                if (!createFunc)
-                    throw 'Resource loader not found for extension ".' + extension + '".';
+				if (!createFunc)
+					throw 'Resource loader not found for extension ".' + extension + '".';
 
 				entry = {
 					status: ResourceState.QUEUED,
@@ -90,14 +94,103 @@ define(['jquery', 'Tatsu/Console', 'Utility/Path'], function ($, console, Path) 
 			return resource !== null ? resource.data() : null;
 		};
 
+		this.start = function () {
+			var key, entry;
+
+			timeStarted = +new Date;
+
+			for(key in entries) {
+				entry = entries[key];
+				entry.status = ResourceState.WAITING;
+				entry.resource.start();
+			}
+
+			// Quick status check, in case we have cached files.
+			setTimeout(statusCheck, 100);
+		};
+
+		this.log = function(showAll) {
+			var i = 1, key, entry, message,
+				elapsedSeconds = Math.round((+new Date - timeStarted) / 1000);
+
+			console.log('ResourceLoader elapsed: ' + elapsedSeconds + ' sec');
+
+			for (key in entries) {
+				entry = entries[key];
+
+				if (!showAll && entry.status !== ResourceState.WAITING)
+					continue;
+
+				message = 'ResourceLoader #' + i + ' [' + entry.resource.url() + '] ';
+				switch (entry.status) {
+					case ResourceState.QUEUED:
+						message += '(Not Started)';
+						break;
+					case ResourceState.WAITING:
+						message += '(Waiting)';
+						break;
+					case ResourceState.LOADED:
+						message += '(Loaded)';
+						break;
+					case ResourceState.ERROR:
+						message += '(Error)';
+						break;
+					case ResourceState.TIMEOUT:
+						message += '(Timeout)';
+						break;
+				}
+
+				console.log(message);
+				i++;
+			}
+		};
+
+		function statusCheck() {
+			var key, entry,
+				checkAgain = false,
+				deltaTime = (+new Date) - lastProgressChange,
+				timedOut = (deltaTime >= self.options.timeout),
+				shouldLog = (deltaTime >= self.options.loggingDelay);
+
+			for(key in entries) {
+				entry = entries[key];
+
+				if (entry.status !== ResourceState.WAITING)
+					continue;
+
+				if (entry.resource.checkStatus)
+					entry.resource.checkStatus();
+
+				if (entry.status === ResourceState.WAITING) {
+					if (timedOut) {
+						entry.resource.onTimeout();
+					}
+					else {
+						checkAgain = true;
+					}
+				}
+			}
+
+			if (checkAgain) {
+				if (shouldLog)
+					self.log();
+
+				setTimeout(statusCheck, self.options.statusInterval);
+			}
+			else {
+				self.log(true);
+			}
+
+		}
+
 		function sendProgress(updatedEntry, listener) {
-			var i,
+			var key,
 				finished = 0,
 				total = 0,
 				entry;
 
-			for (i = 0; i < entries.length; ++i) {
-				entry = entries[i];
+			for (key in entries) {
+				entry = entries[key];
 
 				total++;
 				if (entry.status === ResourceState.LOADED || entry.status === ResourceState.ERROR || entry.status === ResourceState.TIMEOUT) {
@@ -116,11 +209,11 @@ define(['jquery', 'Tatsu/Console', 'Utility/Path'], function ($, console, Path) 
 		}
 
 		function onProgress (resource, statusType) {
-			var i, entry, listener;
+			var i, key, entry = null, listener;
 
-			for (i = 0; i < entries.length; ++i) {
-				if (entries[i].resource === resource) {
-					entry = entries[i];
+			for (key in entries) {
+				if (entries[key].resource === resource) {
+					entry = entries[key];
 					break;
 				}
 			}
@@ -150,14 +243,14 @@ define(['jquery', 'Tatsu/Console', 'Utility/Path'], function ($, console, Path) 
 		};
 
 		this.addProgressListener = function (handler) {
-			progressListeners.push(handler);
+			progressListeners.unshift(handler);
 
 			return handler;
 		};
 
 		this.addCompletionListener = function (handler) {
 			var wrapper = function (e) {
-				if (e.loadedCount === e.totalCount) {
+				if (e.finishedCount === e.totalCount) {
 					handler();
 				}
 			};
@@ -173,6 +266,7 @@ define(['jquery', 'Tatsu/Console', 'Utility/Path'], function ($, console, Path) 
 			for (i = 0; i < progressListeners.length; ++i) {
 				if (progressListeners[i] === handler) {
 					progressListeners.splice(i, 1);
+					return;
 				}
 			}
 		};
@@ -182,7 +276,7 @@ define(['jquery', 'Tatsu/Console', 'Utility/Path'], function ($, console, Path) 
 		};
 
 		this.options = $.extend({}, defaults, options);
-        this.options.resourceRoot = Path.resolve(this.options.resourceRoot);
+		this.options.resourceRoot = Path.resolve(this.options.resourceRoot);
 	}
 
 	return ResourceLoader;
