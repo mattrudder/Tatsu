@@ -41,27 +41,31 @@ define(['Tatsu/Console', 'Tatsu/Game', 'Tatsu/Keyboard', 'Tatsu/ResourceLoader']
 		onPreDraw: function (game) {
 			var ctx = game.graphics.context2D();
 
-			ctx.fillStyle = 'red';
-			ctx.beginPath();
-			ctx.arc(character.x, character.y, 20, 0, Math.PI * 2, true);
-			ctx.fill();
+			// Demoing on the fly resource loading.
+			if (!this.resources.characterSprite) {
+				this.resources.characterSprite = game.loader.load('images/Character.png');
+			}
+			else {
+				ctx.drawImage(this.resources.characterSprite, character.x, character.y);
+			}
 		},
 		onPostDraw: function (game) {
 			// Overlay drawing.
 			var ctx = game.graphics.context2D(),
 				textWidth,
-				img = this.resources.tileset;
+				img = this.resources.tileset,
+				imgAlt;
 
 			ctx.drawImage(this.resources.tileset, 0, 0);
 
-			ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+			ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
 			ctx.fillRect(0, game.size().height - 24, game.size().width, game.size().height);
 
-			ctx.font = '400 14pt "Source Sans Pro"';
+			ctx.font = '400 12pt "Source Sans Pro"';
+			textWidth = ctx.measureText('Tatsu Demo').width
 			ctx.fillStyle = 'rgb(255, 255, 255)';
-			ctx.fillText('Tatsu Demo', textX, game.size().height - 8);
+			ctx.fillText('Tatsu Demo', game.size().width / 2 - textWidth / 2, game.size().height - 7);
 
-			textWidth = ctx.measureText('Tatsu Demo').width;
 			textX -= 2;
 			if (textX <= -textWidth) {
 				textX = game.size().width;
