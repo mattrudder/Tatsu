@@ -2,10 +2,13 @@ define(['Tatsu/Console', 'Tatsu/Game', 'Tatsu/Keyboard', 'Tatsu/ResourceLoader']
 	"use strict";
 
 	var textX,
-		character = { x: 0, y: 0 },
-		keys = new Keyboard();
+		character = { x: 0, y: 0 };
 
 	return Game.createState({
+		preload: [
+			'images/Tileset.png',
+			'maps/test.map'
+		],
 		onEnter: function () {
 			textX = this.size().width;
 
@@ -15,20 +18,20 @@ define(['Tatsu/Console', 'Tatsu/Game', 'Tatsu/Keyboard', 'Tatsu/ResourceLoader']
 			// TODO: Tear down key bindings for this state.
 		},
 		onUpdate: function (dt) {
-			var speed = keys.isKeyDown('shift') ? 2 : 1;
+			var speed = this.keyboard.isKeyDown('shift') ? 2 : 1;
 
 			// TODO: Replace with key bindings
-			if (keys.isKeyDown('left')) {
+			if (this.keyboard.isKeyDown('left')) {
 				character.x -= 3 * speed;
 			}
-			if (keys.isKeyDown('right')) {
+			if (this.keyboard.isKeyDown('right')) {
 				character.x += 3 * speed;
 			}
 
-			if (keys.isKeyDown('up')) {
+			if (this.keyboard.isKeyDown('up')) {
 				character.y -= 3 * speed;
 			}
-			if (keys.isKeyDown('down')) {
+			if (this.keyboard.isKeyDown('down')) {
 				character.y += 3 * speed;
 			}
 

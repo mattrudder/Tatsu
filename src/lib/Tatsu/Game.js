@@ -1,5 +1,12 @@
-define(
-	['require', 'jquery', 'Tatsu/Console', 'Tatsu/Graphics', 'Tatsu/Keyboard', 'Tatsu/ResourceLoader', 'Tatsu/Resources/ImageResource'],
+define([
+	'require',
+	'jquery',
+	'Tatsu/Console',
+	'Tatsu/Graphics',
+	'Tatsu/Keyboard',
+	'Tatsu/ResourceLoader',
+	'Tatsu/Resources/ImageResource',
+	'Tatsu/Resources/JsonResource'],
 	function(r, $, console, Graphics, Keyboard, ResourceLoader) {
 	'use strict';
 
@@ -7,13 +14,16 @@ define(
 			clearColor: 'black'
 		},
 		defaultState = {
+			isLoaded: false,
+			resources: {},
 			onEnter: $.noop,
 			onPreDraw: $.noop,
 			onPostDraw: $.noop,
 			onUpdate: $.noop,
 			onExit: $.noop
 		},
-		defaultLoadingState;
+		defaultLoadingState,
+		knownStates = [];
 
 	function setupRaf() {
 		// http://paulirish.com/2011/requestanimationframe-for-smart-animating/
@@ -52,43 +62,59 @@ define(
 		var self = this,
 			screenSize,
 			incomingState = null,
-			outgoingState = null,
-			resourceLoaderOptions = {},
-			resourceLoader;
+			outgoingState = null;
 
 		this.size = function () {
 			return screenSize;
 		};
 
 		this.pushState = function (state) {
+			var i, compHandler = null, progHandler = null;
+
+			if (incomingState !== null)
+				throw 'Multiple transition states specified!';
+
 			incomingState = state;
+
+			function onProgress(e) {
+				incomingState.progress = progress;
+			}
+
+			function onComplete(e) {
+				incomingState.isLoaded = true;
+
+				self.loader.removeProgressListener(progHandler);
+				self.loader.removeCompletionListener(compHandler);
+			}
+
+			if (incomingState.preload) {
+				progHandler = self.loader.addProgressListener(onProgress);
+				compHandler = self.loader.addCompletionListener(onComplete);
+
+				incomingState.resources = self.loader.preload(incomingState.preload);
+			}
 		};
 
 		this.popState = function () {
+			if (outgoingState !== null)
+				throw 'Multiple transition states specified!';
+
 			outgoingState = currentState(this);
 		};
 
 		this.options = $.extend({}, defaults, options);
 
-		resourceLoader = new ResourceLoader({
+		this.loader = new ResourceLoader({
 			resourceRoot: this.options.resourceRoot,
-			resourceTypes: [r('Tatsu/Resources/ImageResource')],
-			complete: function () {
-				self.popState();
-
-				if (self.options.initialState) {
-					self.pushState(self.options.initialState);
-				}
-			}
+			resourceTypes: [r('Tatsu/Resources/ImageResource'), r('Tatsu/Resources/JsonResource')]
 		});
-
-		resourceLoader.loadResources(this.options.resources || []);
 
 		screenSize = this.options.screenSize || {
 			width: this.options.canvas.width,
 			height: this.options.canvas.height
 		};
 
+		this.keyboard = new Keyboard();
 		this.graphics = new Graphics({
 			screenSize: screenSize,
 			canvas: this.options.canvas
@@ -96,15 +122,19 @@ define(
 
 		this.stateStack = [];
 
-		// TODO: Add built-in preloader state.
-		this.pushState(defaultLoadingState);
-
 		function onPreDraw() {
 			currentState(self).onPreDraw.call(self);
 		}
 
 		function onPostDraw() {
+			var ctx = self.graphics.context2D();
+
 			currentState(self).onPostDraw.call(self);
+
+			if (incomingState && incomingState.progress) {
+				ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+				ctx.fillRect(0, screenSize.height - 20, screenSize.width * incomingState.progress, screenSize.height);
+			}
 		}
 
 		function onUpdate(dt) {
@@ -119,6 +149,7 @@ define(
 			// TODO: Draw retained mode elements here (environment, sprites, etc).
 
 			onPostDraw();
+
 			self.graphics.present();
 		}
 
@@ -132,7 +163,7 @@ define(
 				dt = now - lastFrame;
 
 				// TODO: Investigate best value for stopping render.
-				if (dt < 150) {
+				if (dt < 250) {
 					if (outgoingState) {
 						// TODO: Support transitions between states.
 						outgoingState.onExit.call(self);
@@ -145,7 +176,7 @@ define(
 					onUpdate(dt);
 					draw();
 
-					if (incomingState) {
+					if (incomingState && incomingState.isLoaded) {
 						// TODO: Support transitions between states.
 						currentState(self).onExit.call(self);
 						self.stateStack.push(incomingState);
@@ -165,6 +196,10 @@ define(
 			window.cancelAnimationFrame(self.timerId);
 		}
 
+		if (self.options.initialState) {
+			self.pushState(self.options.initialState);
+		}
+
 		setupDrawTimer();
 	}
 
@@ -173,7 +208,10 @@ define(
 	}
 
 	Game.createState = function (state) {
-		return $.extend({}, defaultState, state);
+		state = $.extend({}, defaultState, state);
+		knownStates.push(state);
+
+		return state;
 	};
 
 	setupRaf();
