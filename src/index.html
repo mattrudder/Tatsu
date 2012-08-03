@@ -4,9 +4,117 @@
 	<title>Tatsu Demo</title>
 	<meta charset="UTF-8">
 	<script data-main="app/main" src="app/require-jquery.js"></script>
+	<style type="text/css">
+		@font-face {
+			font-family: "Source Sans Pro";
+			src: url('app/fonts/SourceSansPro-Regular.otf');
+		}
 
+		@font-face {
+			font-family: "Source Sans Pro";
+			src: url('app/fonts/SourceSansPro-It.otf');
+			font-style: italic;
+		}
+
+		@font-face {
+			font-family: "Source Sans Pro";
+			src: url('app/fonts/SourceSansPro-ExtraLight.otf');
+			font-weight: 200;
+		}
+
+		@font-face {
+			font-family: "Source Sans Pro";
+			src: url('app/fonts/SourceSansPro-ExtraLightIt.otf');
+			font-weight: 200;
+			font-style: italic;
+		}
+
+		@font-face {
+			font-family: "Source Sans Pro";
+			src: url('app/fonts/SourceSansPro-Light.otf');
+			font-weight: 300;
+		}
+
+		@font-face {
+			font-family: "Source Sans Pro";
+			src: url('app/fonts/SourceSansPro-LightIt.otf');
+			font-weight: 300;
+			font-style: italic;
+		}
+
+		@font-face {
+			font-family: "Source Sans Pro";
+			src: url('app/fonts/SourceSansPro-Semibold.otf');
+			font-weight: 600;
+		}
+
+		@font-face {
+			font-family: "Source Sans Pro";
+			src: url('app/fonts/SourceSansPro-SemiboldIt.otf');
+			font-weight: 600;
+			font-style: italic;
+		}
+
+		@font-face {
+			font-family: "Source Sans Pro";
+			src: url('app/fonts/SourceSansPro-Bold.otf');
+			font-weight: 700;
+		}
+
+		@font-face {
+			font-family: "Source Sans Pro";
+			src: url('app/fonts/SourceSansPro-BoldIt.otf');
+			font-weight: 700;
+			font-style: italic;
+		}
+
+		@font-face {
+			font-family: "Source Sans Pro";
+			src: url('app/fonts/SourceSansPro-Black.otf');
+			font-weight: 900;
+		}
+
+		@font-face {
+			font-family: "Source Sans Pro";
+			src: url('app/fonts/SourceSansPro-BlackIt.otf');
+			font-weight: 900;
+			font-style: italic;
+		}
+
+		html, body {
+			font-family: "Source Sans Pro";
+			font-size: 14pt;
+		}
+
+		.extra-light { font-weight: 200; }
+
+		.light { font-weight: 300; }
+
+		.semibold { font-weight: 600; }
+
+		.bold { font-weight: 700; }
+
+		.black { font-weight: 900; }
+
+		.italic {
+			font-style: italic;
+		}
+
+	</style>
 </head>
 <body>
 	<canvas width="1280" height="720"></canvas>
+	<p class="">Regular</p>
+	<p class="italic">Italic</p>
+	<p class="extra-light">Extra Light</p>
+	<p class="extra-light italic">Extra Light Italic</p>
+	<p class="light">Light</p>
+	<p class="light italic">Light Italic</p>
+	<p class="semibold">Semibold</p>
+	<p class="semibold italic">Semibold Italic</p>
+	<p class="bold">Bold</p>
+	<p class="bold italic">Bold Italic</p>
+	<p class="black">Black</p>
+	<p class="black italic">Black Italic</p>
 </body>
 </html>
