@@ -52,10 +52,10 @@ define(['Tatsu/Console', 'Tatsu/Game', 'Tatsu/Keyboard', 'Tatsu/ResourceLoader']
 				textWidth,
 				img = this.resources.tileset;
 
+			ctx.drawImage(this.resources.tileset, 0, 0);
+
 			ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
 			ctx.fillRect(0, game.size().height - 24, game.size().width, game.size().height);
-
-			ctx.drawImage(this.resources.tileset, 0, 0);
 
 			ctx.font = '11pt "Source Sans Pro"';
 			ctx.fillStyle = 'rgb(255, 255, 255)';
