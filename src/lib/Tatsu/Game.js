@@ -22,7 +22,6 @@ define([
 			onUpdate: $.noop,
 			onExit: $.noop
 		},
-		defaultLoadingState,
 		knownStates = [];
 
 	function setupRaf() {
@@ -218,20 +217,6 @@ define([
 	};
 
 	setupRaf();
-
-	defaultLoadingState = Game.createState({
-	   onPostDraw: function () {
-		   var ctx = this.graphics.context2D(),
-			   size = this.size();
-
-		   ctx.fillStyle = 'black';
-		   ctx.fillRect(0, 0, size.width, size.height);
-
-		   ctx.font = '8pt Tahoma';
-		   ctx.fillStyle = 'rgb(255, 255, 255)';
-		   ctx.fillText('Loading State', size.width / 2, size.height / 2);
-	   }
-	});
 
 	return Game;
 });

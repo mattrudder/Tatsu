@@ -4,6 +4,7 @@ define(['jquery', 'Tatsu/Console', 'Utility/Path'], function ($, console, Path) 
 	var defaults = {
 			resourceRoot: '/',
 			resourceTypes: [],
+			autoStart: true,
 			statusInterval: 5000,
 			loggingDelay: 20 * 1000,
 			timeout: Infinity
@@ -21,8 +22,7 @@ define(['jquery', 'Tatsu/Console', 'Utility/Path'], function ($, console, Path) 
 			entries = {},
 			progressListeners = [],
 			lastProgressChange = +new Date,
-			timeStarted,
-			loadingCount = 0;
+			timeStarted = null;
 
 		function fetchResource(url, loadedOnly) {
 			var i,
@@ -33,7 +33,7 @@ define(['jquery', 'Tatsu/Console', 'Utility/Path'], function ($, console, Path) 
 			loadedOnly = loadedOnly || false;
 
 			if (entry) {
-				return loadedOnly && entry.state !== ResourceState.LOADED ? null : entry.resource;
+				return loadedOnly && entry.status !== ResourceState.LOADED ? null : entry.resource;
 			}
 			else if (url.length > 0) {
 				extension = Path.parseUri(url).file;
@@ -54,7 +54,18 @@ define(['jquery', 'Tatsu/Console', 'Utility/Path'], function ($, console, Path) 
 				};
 
 				entries[url] = entry;
-				loadingCount++;
+
+				if (timeStarted === null && self.options.autoStart) {
+					if (self.options.autoStart) {
+						self.start();
+					}
+				}
+				else {
+					entry.status = ResourceState.WAITING;
+					entry.resource.start();
+				}
+
+
 
 				if (!loadedOnly)
 					return entry.resource;
@@ -74,8 +85,7 @@ define(['jquery', 'Tatsu/Console', 'Utility/Path'], function ($, console, Path) 
 					continue;
 				}
 
-				url = Path.combine(this.options.resourceRoot, url);
-				resource = fetchResource(url, false);
+				resource = fetchResource(Path.combine(this.options.resourceRoot, url), false);
 				resourceMap[url] = resource !== null ? resource.data() : null;
 			}
 
@@ -97,12 +107,18 @@ define(['jquery', 'Tatsu/Console', 'Utility/Path'], function ($, console, Path) 
 		this.start = function () {
 			var key, entry;
 
+			if (timeStarted !== null)
+				return;
+
 			timeStarted = +new Date;
 
 			for(key in entries) {
 				entry = entries[key];
-				entry.status = ResourceState.WAITING;
-				entry.resource.start();
+
+				if (entry.status === ResourceState.QUEUED) {
+					entry.status = ResourceState.WAITING;
+					entry.resource.start();
+				}
 			}
 
 			// Quick status check, in case we have cached files.
@@ -178,43 +194,44 @@ define(['jquery', 'Tatsu/Console', 'Utility/Path'], function ($, console, Path) 
 				setTimeout(statusCheck, self.options.statusInterval);
 			}
 			else {
-				self.log(true);
+				onFinished();
 			}
-
 		}
 
-		function sendProgress(updatedEntry, listener) {
-			var key,
-				finished = 0,
-				total = 0,
-				entry;
+		function onFinished() {
+			self.log(true);
 
-			for (key in entries) {
-				entry = entries[key];
+			timeStarted = null;
+		}
 
-				total++;
-				if (entry.status === ResourceState.LOADED || entry.status === ResourceState.ERROR || entry.status === ResourceState.TIMEOUT) {
-					finished++;
-				}
-			}
-
-			listener({
+		function sendProgress(globalData, updatedEntry, listener) {
+			listener($.extend(globalData, {
 				resource: updatedEntry.resource,
 				loaded: (updatedEntry.status === ResourceState.LOADED),
 				error: (updatedEntry.status === ResourceState.ERROR),
-				timeout: (updatedEntry.status === ResourceState.TIMEOUT),
-				finishedCount: finished,
-				totalCount: total
-			});
+				timeout: (updatedEntry.status === ResourceState.TIMEOUT)
+			}));
 		}
 
 		function onProgress (resource, statusType) {
-			var i, key, entry = null, listener;
+			var i,
+				key,
+				entry = null,
+				currentEntry = null,
+				listener,
+				finished = 0,
+				total = 0,
+				globalStatus;
 
 			for (key in entries) {
-				if (entries[key].resource === resource) {
-					entry = entries[key];
-					break;
+				currentEntry = entries[key];
+				if (currentEntry !== null && currentEntry.resource === resource) {
+					entry = currentEntry;
+				}
+
+				total++;
+				if (currentEntry.status === ResourceState.LOADED || currentEntry.status === ResourceState.ERROR || currentEntry.status === ResourceState.TIMEOUT) {
+					finished++;
 				}
 			}
 
@@ -222,11 +239,20 @@ define(['jquery', 'Tatsu/Console', 'Utility/Path'], function ($, console, Path) 
 				return;
 
 			entry.status = statusType;
+			if (entry.status === ResourceState.LOADED || entry.status === ResourceState.ERROR || entry.status === ResourceState.TIMEOUT) {
+				finished++;
+			}
+
 			lastProgressChange = +new Date();
+
+			globalStatus = {
+				finishedCount: finished,
+				totalCount: total
+			}
 
 			for (i = 0; i < progressListeners.length; ++i) {
 				listener = progressListeners[i];
-				sendProgress(entry, listener);
+				sendProgress(globalStatus, entry, listener);
 			}
 		}
 

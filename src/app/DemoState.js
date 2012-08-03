@@ -49,14 +49,15 @@ define(['Tatsu/Console', 'Tatsu/Game', 'Tatsu/Keyboard', 'Tatsu/ResourceLoader']
 		onPostDraw: function () {
 			// Overlay drawing.
 			var ctx = this.graphics.context2D(),
-				textWidth;
+				textWidth,
+				img = this.loader.load('images/Tileset.png');
 
 			ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
 			ctx.fillRect(0, this.size().height - 24, this.size().width, this.size().height);
 
-			ctx.font = '8pt "Oxygene 1"';
+			ctx.font = '11pt "Source Sans Pro"';
 			ctx.fillStyle = 'rgb(255, 255, 255)';
-			ctx.fillText('TATSU DEMO', textX, this.size().height - 8);
+			ctx.fillText('Tatsu Demo', textX, this.size().height - 8);
 
 			textWidth = ctx.measureText('Tatsu Demo').width;
 			textX -= 2;
