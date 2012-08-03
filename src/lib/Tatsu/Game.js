@@ -90,7 +90,7 @@ define([
 				progHandler = self.loader.addProgressListener(onProgress);
 				compHandler = self.loader.addCompletionListener(onComplete);
 
-				incomingState.resources = self.loader.preload(incomingState.preload);
+				$.extend(incomingState.resources, self.loader.preload(incomingState.preload));
 				self.loader.start();
 			}
 		};
@@ -123,14 +123,15 @@ define([
 		this.stateStack = [];
 
 		function onPreDraw() {
-			currentState(self).onPreDraw.call(self);
+			var state = currentState(self);
+			state.onPreDraw.call(state, self);
 		}
 
 		function onPostDraw() {
 			var ctx = self.graphics.context2D(),
 				state = currentState(self);
 
-			state.onPostDraw.call(self);
+			state.onPostDraw.call(state, self);
 
 			if (incomingState && incomingState.progress) {
 				// TODO: Allow states to provide progress drawing?
@@ -140,7 +141,8 @@ define([
 		}
 
 		function onUpdate(dt) {
-			currentState(self).onUpdate.call(self, dt);
+			var state = currentState(self);
+			state.onUpdate.call(state, self, dt);
 		}
 
 		function draw() {
@@ -159,7 +161,7 @@ define([
 			var lastFrame = +new Date();
 
 			function loop(now) {
-				var dt;
+				var dt, state;
 
 				self.timerId = window.requestAnimationFrame(loop, self.graphics.canvasElem);
 				dt = now - lastFrame;
@@ -168,9 +170,11 @@ define([
 				if (dt < 250) {
 					if (outgoingState) {
 						// TODO: Support transitions between states.
-						outgoingState.onExit.call(self);
+						outgoingState.onExit.call(state, self);
 						self.stateStack.pop();
-						currentState(self).onEnter.call(self);
+
+						state = currentState(self);
+						state.onEnter.call(state, self);
 
 						outgoingState = null;
 					}
@@ -180,9 +184,11 @@ define([
 
 					if (incomingState && incomingState.isLoaded) {
 						// TODO: Support transitions between states.
-						currentState(self).onExit.call(self);
+						state = currentState(self);
+						state.onEnter.call(state, self);
+
 						self.stateStack.push(incomingState);
-						incomingState.onEnter.call(self);
+						incomingState.onEnter.call(incomingState, self);
 
 						incomingState = null;
 					}

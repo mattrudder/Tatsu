@@ -65,8 +65,6 @@ define(['jquery', 'Tatsu/Console', 'Utility/Path'], function ($, console, Path) 
 					entry.resource.start();
 				}
 
-
-
 				if (!loadedOnly)
 					return entry.resource;
 			}
@@ -74,11 +72,11 @@ define(['jquery', 'Tatsu/Console', 'Utility/Path'], function ($, console, Path) 
 			return null;
 		}
 
-		this.preload = function (resourceList) {
-			var i, url, resource, resourceMap = {};
+		this.preload = function (preloaderMap) {
+			var key, url, resource, resourceMap = {};
 
-			for (i = 0; i < resourceList.length; ++i) {
-				url = resourceList[i];
+			for (key in preloaderMap) {
+				url = preloaderMap[key];
 
 				if (typeof url !== 'string') {
 					console.warn('Resource list contains a non-string value.');
@@ -86,7 +84,7 @@ define(['jquery', 'Tatsu/Console', 'Utility/Path'], function ($, console, Path) 
 				}
 
 				resource = fetchResource(Path.combine(this.options.resourceRoot, url), false);
-				resourceMap[url] = resource !== null ? resource.data() : null;
+				resourceMap[key] = resource !== null ? resource.data() : null;
 			}
 
 			return resourceMap;
