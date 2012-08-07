@@ -1,13 +1,13 @@
-define(['jquery'], function ($) {
+define(['Utility/Utility', 'Utility/Ajax'], function (Util, Ajax) {
 	"use strict";
 
 	var defaults = {};
 
 	function Tilemap (options) {
-		this.options = $.extend({}, defaults, options);
+		this.options = Util.extend({}, defaults, options);
 
-		$.getJSON(this.options.url, function () {
-
+		Ajax.getJSON(this.options.url, function (data) {
+			console.log(data);
 		});
 	}
 

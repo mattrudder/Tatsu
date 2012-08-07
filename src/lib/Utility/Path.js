@@ -1,5 +1,4 @@
-/* Path.js: methods for manipulating paths used in Tatsu.
- *
+/**
  * Includes parseUri regular expressions
  * http://blog.stevenlevithan.com/archives/parseuri
  * Copyright 2007, Steven Levithan

@@ -1,4 +1,4 @@
-define(['jquery'], function ($) {
+define(['Utility/Utility', 'Utility/Ajax'], function (Util, Ajax) {
 	"use strict";
 
 	function JsonResource (fileUrl, loader) {
@@ -7,7 +7,7 @@ define(['jquery'], function ($) {
 			retObject = {};
 
 		function onLoad(json) {
-			$.extend(retObject, json);
+			Util.extend(retObject, json);
 			loader.onLoad(self);
 		}
 
@@ -17,7 +17,7 @@ define(['jquery'], function ($) {
 
 		// Public interface.
 		this.start = function () {
-			request = $.ajax({
+			request = Ajax.ajax({
 				url: fileUrl,
 				type: 'GET',
 				dataType: 'json',

@@ -1,4 +1,4 @@
-define(['jquery', 'Tatsu/Console', 'Utility/Path'], function ($, console, Path) {
+define(['Utility/Utility', 'Tatsu/Console', 'Utility/Path'], function (Util, console, Path) {
 	"use strict";
 
 	var defaults = {
@@ -203,7 +203,7 @@ define(['jquery', 'Tatsu/Console', 'Utility/Path'], function ($, console, Path) 
 		}
 
 		function sendProgress(globalData, updatedEntry, listener) {
-			listener($.extend(globalData, {
+			listener(Util.extend(globalData, {
 				resource: updatedEntry.resource,
 				loaded: (updatedEntry.status === ResourceState.LOADED),
 				error: (updatedEntry.status === ResourceState.ERROR),
@@ -299,7 +299,7 @@ define(['jquery', 'Tatsu/Console', 'Utility/Path'], function ($, console, Path) 
 			self.removeProgressListener(handler);
 		};
 
-		this.options = $.extend({}, defaults, options);
+		this.options = Util.extend({}, defaults, options);
 		this.options.resourceRoot = Path.resolve(this.options.resourceRoot);
 	}
 

@@ -1,13 +1,13 @@
 define([
 	'require',
-	'jquery',
+	'Utility/Utility',
 	'Tatsu/Console',
 	'Tatsu/Graphics',
 	'Tatsu/Keyboard',
 	'Tatsu/ResourceLoader',
 	'Tatsu/Resources/ImageResource',
 	'Tatsu/Resources/JsonResource'],
-	function(r, $, console, Graphics, Keyboard, ResourceLoader) {
+	function(r, Util, console, Graphics, Keyboard, ResourceLoader) {
 	'use strict';
 
 	var defaults = {
@@ -16,11 +16,11 @@ define([
 		defaultState = {
 			isLoaded: false,
 			resources: {},
-			onEnter: $.noop,
-			onPreDraw: $.noop,
-			onPostDraw: $.noop,
-			onUpdate: $.noop,
-			onExit: $.noop
+			onEnter: Util.noop,
+			onPreDraw: Util.noop,
+			onPostDraw: Util.noop,
+			onUpdate: Util.noop,
+			onExit: Util.noop
 		},
 		knownStates = [];
 
@@ -90,7 +90,7 @@ define([
 				progHandler = self.loader.addProgressListener(onProgress);
 				compHandler = self.loader.addCompletionListener(onComplete);
 
-				$.extend(incomingState.resources, self.loader.preload(incomingState.preload));
+				Util.extend(incomingState.resources, self.loader.preload(incomingState.preload));
 				self.loader.start();
 			}
 		};
@@ -102,7 +102,7 @@ define([
 			outgoingState = currentState(this);
 		};
 
-		this.options = $.extend({}, defaults, options);
+		this.options = Util.extend({}, defaults, options);
 
 		this.loader = new ResourceLoader({
 			resourceRoot: this.options.resourceRoot,
@@ -216,7 +216,7 @@ define([
 	}
 
 	Game.createState = function (state) {
-		state = $.extend({}, defaultState, state);
+		state = Util.extend({}, defaultState, state);
 		knownStates.push(state);
 
 		return state;
