@@ -1,4 +1,4 @@
-define(['Utility/Utility', 'Tatsu/Console', 'Utility/Path'], function (Util, console, Path) {
+define('Tatsu/ResourceLoader', ['Utility/Utility', 'Tatsu/Console', 'Utility/Path'], function (Util, console, Path) {
 	"use strict";
 
 	var defaults = {

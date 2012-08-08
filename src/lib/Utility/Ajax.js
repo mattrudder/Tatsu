@@ -1,4 +1,4 @@
-define(['Utility/Utility'], function (Util) {
+define('Utility/Ajax', ['Utility/Utility'], function (Util) {
 	var get,
 		getJson;
 

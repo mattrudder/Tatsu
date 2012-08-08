@@ -4,7 +4,7 @@
  * Copyright 2007, Steven Levithan
  * Released under the MIT license.
  */
-define(function () {
+define('Utility/Path', function () {
 	"use strict";
 
 	var anchor = document.createElement('a'), // Phony anchor used to resolve relative paths.

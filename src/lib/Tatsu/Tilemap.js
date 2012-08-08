@@ -1,4 +1,4 @@
-define(['Utility/Utility', 'Utility/Ajax'], function (Util, Ajax) {
+define('Tatsu/Tilemap', ['Utility/Utility', 'Utility/Ajax'], function (Util, Ajax) {
 	"use strict";
 
 	var defaults = {};

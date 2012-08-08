@@ -1,4 +1,4 @@
-define(['Utility/Utility', 'Utility/Ajax'], function (Util, Ajax) {
+define('Tatsu/JsonResource', ['Utility/Utility', 'Utility/Ajax'], function (Util, Ajax) {
 	"use strict";
 
 	function JsonResource (fileUrl, loader) {

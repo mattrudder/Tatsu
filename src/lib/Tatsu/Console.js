@@ -1,4 +1,4 @@
-define(function () {
+define('Tatsu/Console', function () {
 	"use strict";
 
 	var history = [],

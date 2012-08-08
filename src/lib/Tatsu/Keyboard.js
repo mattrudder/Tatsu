@@ -1,4 +1,4 @@
-define([], function () {
+define('Tatsu/Keyboard', function () {
 	'use strict';
 
 	var KeyNames = {

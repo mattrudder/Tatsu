@@ -1,4 +1,4 @@
-define([], function () {
+define('Utility/Utility', function () {
 	"use strict";
 
 	var class2type = {},

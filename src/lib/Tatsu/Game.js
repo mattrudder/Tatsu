@@ -1,4 +1,4 @@
-define([
+define('Tatsu/Game', [
 	'require',
 	'Utility/Utility',
 	'Tatsu/Console',

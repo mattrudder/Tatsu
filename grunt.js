@@ -26,7 +26,21 @@ module.exports = function(grunt) {
     // },
     concat: {
       dist: {
-        src: ['<banner:meta.banner>', '<file_strip_banner:dist/tatsu.js>'],
+        src: [
+          '<banner:meta.banner>',
+          'src/lib/Tatsu/Console.js',
+          'src/lib/Tatsu/Game.js',
+          'src/lib/Tatsu/Gamepad.js',
+          'src/lib/Tatsu/Graphics.js',
+          'src/lib/Tatsu/Keyboard.js',
+          'src/lib/Tatsu/ResourceLoader.js',
+          'src/lib/Tatsu/Resources/ImageResource.js',
+          'src/lib/Tatsu/Resources/JsonResource.js',
+          'src/lib/Tatsu/Tilemap.js',
+          'src/lib/Utility/Ajax.js',
+          '<file_strip_banner:src/lib/Utility/Path.js>',
+          'src/lib/Utility/Utility.js'
+        ],
         dest: 'dist/tatsu.js'
       }
     },
@@ -65,6 +79,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-requirejs');
 
   // Default task
-  grunt.registerTask('default', 'requirejs concat min');
+  grunt.registerTask('default', 'concat min');
 
 };

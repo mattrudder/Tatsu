@@ -1,4 +1,4 @@
-define(['Utility/Utility'], function (Util) {
+define('Tatsu/Graphics', ['Utility/Utility'], function (Util) {
 	'use strict';
 
 	var defaults = {
