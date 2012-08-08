@@ -93,6 +93,9 @@ define('Tatsu/Game', [
 				Util.extend(incomingState.resources, self.loader.preload(incomingState.preload));
 				self.loader.start();
 			}
+			else {
+				incomingState.isLoaded = true;
+			}
 		};
 
 		this.popState = function () {

@@ -4,11 +4,10 @@ define('Tatsu/Graphics', ['Utility/Utility'], function (Util) {
 	var defaults = {
             scaleMode: 'pixel'
         },
-		ctx2d,
         imageSmoothingDisabled = false;
 
 	function Graphics(options) {
-        var i, vendors = ['moz', 'webkit', 'o', 'ms'];
+        var i, vendors = ['moz', 'webkit', 'o', 'ms'], ctx2d = null;
 
         this.options = Util.extend({}, defaults, options);
 		ctx2d = this.options.canvas.getContext('2d');
@@ -37,40 +36,39 @@ define('Tatsu/Graphics', ['Utility/Utility'], function (Util) {
                 }
             }());
         }
-	}
 
-	// NOTE: In 3D mode, context2D should be able to emulate canvas rendering above/below 3D content
-	Graphics.prototype.context2D = function () {
-		return ctx2d;
-	};
+		// NOTE: In 3D mode, context2D should be able to emulate canvas rendering above/below 3D content
+		this.context2D = function () {
+			return ctx2d;
+		};
 
-	Graphics.prototype.clear = function (clearColor) {
-        ctx2d.save();
-        ctx2d.beginPath();
-        ctx2d.rect(0, 0, this.options.screenSize.width, this.options.screenSize.height);
-        ctx2d.clip();
+		this.clear = function (clearColor) {
+			ctx2d.save();
+			ctx2d.beginPath();
+			ctx2d.rect(0, 0, this.options.screenSize.width, this.options.screenSize.height);
+			ctx2d.clip();
 
-		ctx2d.fillStyle = clearColor || 'black';
-		ctx2d.fillRect(0, 0, this.options.screenSize.width, this.options.screenSize.height);
-	};
+			ctx2d.fillStyle = clearColor || 'black';
+			ctx2d.fillRect(0, 0, this.options.screenSize.width, this.options.screenSize.height);
+		};
 
-    Graphics.prototype.present = function () {
-        var srcWidth = this.options.screenSize.width,
-            srcHeight = this.options.screenSize.height,
-            destWidth = this.options.canvas.width,
-            destHeight = this.options.canvas.height,
-            zoomX, zoomY, imgData;
+		this.present = function () {
+			var srcWidth = this.options.screenSize.width,
+				srcHeight = this.options.screenSize.height,
+				destWidth = this.options.canvas.width,
+				destHeight = this.options.canvas.height,
+				zoomX, zoomY, imgData;
 
-        ctx2d.restore(); // end clip
+			ctx2d.restore(); // end clip
 
-        if (destWidth !== srcWidth || destHeight !== srcHeight) {
-            if (this.options.scaleMode !== 'pixel' || imageSmoothingDisabled) {
-                ctx2d.drawImage(this.options.canvas, 0, 0, srcWidth, srcHeight, 0, 0, destWidth, destHeight);
-            }
-            else {
-                ctx2d.drawImage(this.options.canvas, 0, 0, srcWidth, srcHeight, 0, 0, destWidth, destHeight);
+			if (destWidth !== srcWidth || destHeight !== srcHeight) {
+				if (this.options.scaleMode !== 'pixel' || imageSmoothingDisabled) {
+					ctx2d.drawImage(this.options.canvas, 0, 0, srcWidth, srcHeight, 0, 0, destWidth, destHeight);
+				}
+				else {
+					ctx2d.drawImage(this.options.canvas, 0, 0, srcWidth, srcHeight, 0, 0, destWidth, destHeight);
 
-                // Fallback image resize. (read: sloooooooooow!)
+					// Fallback image resize. (read: sloooooooooow!)
 //                zoomX = destWidth / srcWidth;
 //                zoomY = destHeight / srcHeight;
 //
@@ -97,10 +95,10 @@ define('Tatsu/Graphics', ['Utility/Utility'], function (Util) {
 //                        ctx2d.fillRect(x * zoomX, y * zoomY, zoomX, zoomY);
 //                    }
 //                }
-            }
-        }
-
-    };
+				}
+			}
+		};
+	}
 
 	return Graphics;
 });

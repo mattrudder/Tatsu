@@ -1,4 +1,4 @@
-define('Tatsu/ImageResource', function () {
+define('Tatsu/Resources/ImageResource', function () {
 	"use strict";
 
 	function ImageResource (fileUrl, loader) {
